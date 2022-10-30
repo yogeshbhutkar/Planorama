@@ -1,0 +1,40 @@
+{% extends 'base.html' %} {% block body %}
+<!-- form -->
+<div class="container">
+  <form method="post">
+    <div class="mb-3">
+      <label for="title" class="form-label">Title</label>
+      <input
+        required
+        type="text"
+        class="form-control"
+        id="title"
+        name="title"
+        aria-describedby="emailHelp"
+      />
+    </div>
+    <div class="mb-3">
+      <label for="content" class="form-label">Content</label>
+      <input
+        required
+        type="text"
+        class="form-control"
+        id="content"
+        name="content"
+      />
+    </div>
+    <div class="mb-3 inp">
+      <label for="deadline" class="form-label">Deadline</label>
+      <input
+        required
+        type="datetime-local"
+        class="form-control"
+        id="deadline"
+        name="deadline"
+      />
+    </div>
+    <button type="submit" class="btn btn-outline-dark">Add</button>
+  </form>
+</div>
+
+{% endblock body %}

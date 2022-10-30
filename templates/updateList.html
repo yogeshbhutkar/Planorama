@@ -1,0 +1,39 @@
+{% extends 'base.html' %} {% block body %}
+<!-- form -->
+<div class="container">
+  <form method="post" action="/updateList/{{temp.sno}}">
+    <div class="mb-3">
+      <label for="title" class="form-label">Name of the list</label>
+      <input
+        required
+        placeholder="{{temp.listName}}"
+        type="text"
+        class="form-control"
+        id="title"
+        name="title"
+        aria-describedby="emailHelp"
+      />
+    </div>
+    <button type="submit" class="btn btn-outline-dark">Update</button>
+    <a href="/add/{{temp.sno}}" type="button" class="btn btn-outline-dark ms-3">
+      Add item </a
+    ><a
+      type="button"
+      class="btn ms-3 delete-all btn-outline-dark"
+      onclick="showAlert('/delete/{{temp.sno}}');"
+    >
+      Remove list
+    </a>
+  </form>
+</div>
+<script>
+  function showAlert(str) {
+    var ans = confirm(
+      "All the tasks associated with the lists will be deleted. "
+    );
+    if (ans) {
+      window.location = str;
+    }
+  }
+</script>
+{% endblock body %}

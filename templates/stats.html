@@ -1,0 +1,42 @@
+{% extends 'base.html' %} {% block body %}
+<div class="container">
+  {% if labels | length == 0 %}
+  <h4 class="mt-5 pt-3">Complete some tasks to see the report here</h4>
+  {% else %}
+  <h4 class="mt-5 pt-5 mb-5">Completed tasks day-wise report</h4>
+  <div>
+    <h6>No. of tasks</h6>
+    <canvas id="lineChart" width="900" height="400"></canvas>
+  </div>
+  <h6 class="text-center">Day</h6>
+  <div class="py-5">
+    <h4 class="pb-4">Tasks which passed deadline</h4>
+    {% for item in pendingData %}
+    <li>{{item.title}}</li>
+    {% endfor %}
+  </div>
+  {% endif %}
+</div>
+<script>
+  var ctx = document.getElementById("lineChart").getContext("2d");
+  var lineChart = new Chart(ctx, {
+      type: "line",
+      data: {
+          labels: {{ labels | safe }},
+          datasets: [
+              {
+                  label: "Data points",
+                  data: {{ values | safe }},
+                  fill: true,
+                  borderColor: "#00ABB3",
+                  backgroundColor: "#9ED2C6",
+                  lineTension: 0.1
+              }
+          ]
+      },
+      options: {
+          responsive: true,
+      }
+  });
+</script>
+{% endblock body %}

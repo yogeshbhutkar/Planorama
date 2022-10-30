@@ -1,0 +1,96 @@
+{% extends 'base.html' %} {% block body %} {% set count = 1 %}
+<div class="container back">
+  <h3 class="py-3 mt-5 headline">Tasks</h3>
+  <form action="/index" method="post">
+    <div class="mb-3 inp side">
+      <input
+        type="text"
+        class="form-control shadow bg-white rounded py-2"
+        id="name"
+        name="name"
+        aria-describedby="emailHelp"
+        required
+      />
+    </div>
+    <div class="side px-2"> 
+        <button type="submit" class="btn btn-dark txt shadow-lg"><i class="fa-solid fa-plus fs-4"></i></button>
+    </div>
+  </form>
+  <div class="row pt-5 mt-5">
+    {% for each in allLists %}
+    {% if each.username == username %}
+    <div class="col-md-4 mb-5">
+      <div
+        class="card shadow p-3 mb-5 bg-white rounded"
+        style="width: 18rem; border: 3px solid #9ED2C6"
+      >
+        <div class="text-center">
+          <img
+            src="../static/task-image.jpg"
+            class="card-img-top task-image"
+            alt="..."
+          />
+        </div>
+        <div class="card-body text-center deletee">
+          <h5 class="card-title mb-3">
+            {{each.listName}}
+            <a
+              href="/updateList/{{each.sno}}"
+              style="color: black"
+              type="button"
+              class="fa-solid fa-pen-to-square button"
+            ></a>
+          </h5>
+        </div>
+        {% for element in listItems %} {% if each.sno == element.reference and
+        element.completedFlag!="on"%}
+
+        <ul class="list-group list-group-flush">
+          <h6>
+            <a
+              href="/updateItems/{{element.sno}}"
+              class="list-group-item"
+              style="color: black; border: 0"
+              >{{element.title}}</a
+            >
+          </h6>
+        </ul>
+        {% endif %} {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+    
+    
+
+    {% endfor %}
+  </div>
+  <div>
+    <h4 class="mt-4 headline2">Completed Tasks</h4>
+    {% if not listItems  %}
+    <h5 class="mt-5">Completed tasks will be shown here.</h5>
+    {% else %}
+    <table class="table mt-4 shadow-lg p-3 mb-5 bg-white round">
+      <thead class="table-success round">
+          <th scope="col" >Sno.</th>
+          <th scope="col">Name of the task</th>
+          <th scope="col">Description</th>
+          <th scope="col">Date of Completion</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% set count = namespace(value=1) %} {% for temp in listItems %} {% if
+        temp.completedFlag != "off" and temp.username == username %}
+        <tr>
+          <td>{{ count.value }}</td>
+          {% set count.value = count.value + 1 %}
+          <td>{{temp.title}}</td>
+          <td>{{temp.content}}</td>
+          <td>{{temp.timeCompleted}}</td>
+        </tr>
+        {% endif %} {% endfor %}
+      </tbody>
+    </table>
+    {% endif %}
+  </div>
+</div>
+{% endblock body %}

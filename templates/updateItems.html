@@ -1,0 +1,92 @@
+{% extends 'base.html' %} {% block body %}
+<!-- form -->
+<div class="container">
+  <form method="post" action="/updateItems/{{listItems.sno}}">
+    <div class="mb-3">
+      <label for="title" class="form-label">Title</label>
+      <input
+        placeholder="{{listItems.title}}"
+        type="text"
+        class="form-control"
+        id="title"
+        name="title"
+        aria-describedby="emailHelp"
+      />
+    </div>
+    <div class="mb-3">
+      <label for="content" class="form-label">Content</label>
+      <input
+        placeholder="{{listItems.content}}"
+        type="text"
+        class="form-control"
+        id="content"
+        name="content"
+      />
+    </div>
+    <div class="mb-3 inp">
+      <label for="deadline" class="form-label">Deadline</label>
+      <input
+        required
+        type="datetime-local"
+        class="form-control"
+        id="deadline"
+        name="deadline"
+      />
+    </div>
+    <input type="checkbox" name="status" value="on" />
+    <input type="hidden" name="status" value="off" />
+    <label for="status" class="mb-3">Mark it as complete</label>
+    <div class="dropdown">
+      <a
+        class="btn btn-dark dropdown-toggle mb-2"
+        href="#"
+        role="button"
+        data-bs-toggle="dropdown"
+        aria-expanded="false"
+      >
+        List
+      </a>
+
+      <ul class="dropdown-menu">
+        {% for item in dropList %}
+        <li>
+          <a
+            class="dropdown-item"
+            href="/update-route/{{listItems.sno}}/{{item.sno}}"
+            >{{item.listName}}</a
+          >
+        </li>
+
+        {% endfor %}
+      </ul>
+
+      <ul class="dropdown-menu">
+        {% for item in allLists %} {% if listItems.reference==item.sno %}
+        <li>
+          <a
+            class="dropdown-item active"
+            href="/update-route/{{listItems.sno}}/{{item.sno}}"
+            >{{item.listName}}</a
+          >
+        </li>
+        {% else %}
+        <li>
+          <a
+            class="dropdown-item"
+            href="/update-route/{{listItems.sno}}/{{item.sno}}"
+            >{{item.listName}}</a
+          >
+        </li>
+        {% endif %} {% endfor %}
+      </ul>
+    </div>
+    <button type="submit" class="btn btn-outline-dark me-2 mt-2">Update</button>
+    <a
+      type="submit"
+      href="/deleteItem/{{listItems.sno}}"
+      class="btn btn-outline-dark mt-2"
+      >Delete</a
+    >
+  </form>
+</div>
+{% endblock body %}
