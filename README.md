@@ -11,5 +11,5 @@ The web app is made in such a way that people of all the age groups can elegantl
 The application is made using Python's Flask, sql alchemy as well as the jinja templates.
 
 
-Currently, the project is hosted on the url: https://bhutkaryogesh.pythonanywhere.com/
+Currently, the project is hosted on the url: https://fascinatingly-cerulean-lemur-locale-dev.wayscript.cloud/
 
