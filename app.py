@@ -1,78 +1,21 @@
-from datetime import datetime, date
 from flask import *
 from flask_sqlalchemy import SQLAlchemy
+from models import *
+from fileMethods import *
 
-signedInUser = ''
-
-
-file = open('count.txt','w')
-file.write(str(0))
-file.close()
-f = open('username.txt', 'w')
-f.close()
-
-def getCount():
-    file = open('count.txt', 'r')
-    count = int(file.readline())
-    count += 1
-    file.close()
-    file = open('count.txt','w')
-    file.write(str(count))
-    return count
-
-def writeFile(string):
-    f = open('username.txt', 'w')
-    f.write(string)
-    f.close()
-
-def readFile():
-    f = open('username.txt', 'r')
-    return f.readline()
-
+# Initializing the app
 app = Flask(__name__)
 
+# Writing configs for storing DB URI
 app.config['SQLALCHEMY_DATABASE_URI']= 'sqlite:///kanban.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
+# Creating the db
 db = SQLAlchemy(app)
-
-class Users(db.Model):
-    __tablename__ = "users"
-    sno = db.Column(db.Integer, primary_key = True)
-    username = db.Column(db.String(200), nullable = False, unique = True)
-    password = db.Column(db.String(200), nullable = False)
-
-    def __repr__(self):
-        return f"{self.sno} - {self.username}"
-
-
-class KanBanList(db.Model):
-    __tablename__ = "kanbanlist" 
-    sno = db.Column(db.ForeignKey("users.sno"))
-    sid = db.Column(db.Integer, primary_key=True)
-    listName = db.Column(db.String(200), nullable = False)
-    username = db.Column(db.String(200), nullable = False)
-    
-    def __repr__(self):
-        return f"{self.sno} - {self.listName}"
-
-class ListItems(db.Model):
-    sno = db.Column(db.Integer, primary_key = True)
-    sid = db.Column(db.ForeignKey("kanbanlist.sid"))
-    title = db.Column(db.String(200), nullable = False)
-    reference = db.Column(db.Integer, nullable = False)
-    deadline = db.Column(db.Date, nullable = False)
-    content = db.Column(db.String(200), nullable = False)
-    completedFlag = db.Column(db.String(20), nullable = False, default="off")
-    timeCreated = db.Column(db.String(20), default = str(datetime.now()))
-    timeCompleted = db.Column(db.String(20))
-    username = db.Column(db.String(200), nullable = False)
-    
-    
-    def __repr__(self):
-        return f"{self.sno} - {self.title}"
 db.create_all()
 
+
+# Routes
 @app.route("/add/<int:id>", methods = ["GET", "POST"])
 def add(id):
     if request.method == "POST":
@@ -108,14 +51,14 @@ def updateList(sno):
         if (element.sno==sno):
             temp = element
     
-    return render_template('updateList.html', temp = temp)  
+    return render_template('updateList.html', temp = temp)
 
 @app.route("/", methods = ["GET", "POST"])
 def sign_in():
     status = True
     if request.method == "POST":
         users = Users.query.filter_by(username = request.form['username'], password = request.form['password']).first()
-        
+
         if (users):
             writeFile(request.form['username'])
             return redirect('/index')
@@ -233,4 +176,4 @@ def about():
     return render_template('about.html')
 
 if __name__=="__main__":
-    app.run(host="localhost", debug=False)
+    app.run(host="localhost", debug=True)
